@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hexpay/backend/models/QRArguments.dart';
 import 'package:hexpay/backend/models/Transaction.dart';
+import 'package:hexpay/consts/routes.dart';
+import 'package:hexpay/locator.dart';
+import 'package:hexpay/services/navigator.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class PaymentView extends ChangeNotifier {
@@ -21,11 +25,14 @@ class PaymentView extends ChangeNotifier {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    print(response.paymentId);
+    getIt<NavigationService>()
+        .replaceTo(QR_CODE, arguments: QRArguments(response.paymentId));
+    setLoading(false);
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
     print(response);
+    setLoading(false);
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {

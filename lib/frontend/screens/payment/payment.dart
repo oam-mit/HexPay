@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hexpay/backend/models/Transaction.dart';
 
 import 'package:hexpay/backend/views/paymentView.dart';
+import 'package:hexpay/frontend/widgets/SpinnerWidget.dart';
 
 import 'package:hexpay/locator.dart';
 
@@ -10,6 +11,10 @@ import 'package:provider/provider.dart';
 
 class PaymentScreen extends StatelessWidget {
   Widget renderBody(TransactionArguments arguments, PaymentView paymentView) {
+    if (paymentView.loading)
+      return Center(
+        child: SpinnerWidget(),
+      );
     return Scaffold(
         appBar: AppBar(
           title: Text('Make Payment'),
