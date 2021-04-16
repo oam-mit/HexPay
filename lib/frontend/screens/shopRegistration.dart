@@ -247,7 +247,7 @@ class _ShopRegisterScreenState extends State<ShopRegisterScreen> {
                 !authView.loading
                     ? ElevatedButton.icon(
                         onPressed: () async {
-                          authView.customerShop(await _getMappedInputs());
+                          authView.registerShop(await _getMappedInputs());
                         },
                         icon: Icon(Icons.send),
                         label: Text('Submit'))

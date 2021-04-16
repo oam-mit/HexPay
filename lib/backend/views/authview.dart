@@ -54,6 +54,11 @@ class AuthView extends ChangeNotifier {
   }
 
   void login(phone, password) async {
+    if (phone.length == 0 || password.length == 0) {
+      getIt<DialogService>().showAlertDialog(
+          'Error', 'Please enter both phone number and password');
+      return;
+    }
     Uri url = Uri.parse(BASE_URL + "/api/user/login");
     setLoading(true);
     Response resp =
@@ -79,7 +84,7 @@ class AuthView extends ChangeNotifier {
     setLoading(false);
   }
 
-  void customerShop(Map<String, dynamic> details) async {
+  void registerShop(Map<String, dynamic> details) async {
     setLoading(true);
     try {
       dio.FormData formData = dio.FormData.fromMap(details);
@@ -115,9 +120,9 @@ class AuthView extends ChangeNotifier {
   void logout() async {
     Map status = await getIt<StorageView>().deleteUser();
     if (status['status'] == 'successful') {
+      getIt<NavigationService>().replaceTo(LOGIN);
       getIt<DialogService>()
           .showAlertDialog('Success', 'Logged out successfully');
-      getIt<NavigationService>().replaceTo(LOGIN);
     } else {
       getIt<DialogService>().showAlertDialog('Error', 'Please try again');
     }

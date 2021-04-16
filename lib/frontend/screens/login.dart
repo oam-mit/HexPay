@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hexpay/backend/models/WebViewArguments.dart';
 import 'package:hexpay/backend/views/authview.dart';
 import 'package:hexpay/consts/routes.dart';
+import 'package:hexpay/consts/urls.dart';
 import 'package:hexpay/frontend/widgets/SpinnerWidget.dart';
 import 'package:hexpay/locator.dart';
 import 'package:hexpay/services/navigator.dart';
@@ -18,83 +20,116 @@ class LoginScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 60.0),
-              child: Center(
-                child: Container(
-                    width: 100,
-                    height: 100,
-                    child: Text(
-                      'Login',
-                      style: TextStyle(fontSize: 40),
-                    )),
-              ),
+            Image.asset(
+              'assets/images/login_background.png',
+              width: 300.0,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: TextField(
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
-                ],
-                controller: _userNameController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Phone Number',
-                    hintText: 'Enter Phone number'),
-              ),
-            ),
-            Padding(
-              padding:
-                  EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
-              //padding: EdgeInsets.symmetric(horizontal: 15),
-              child: TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
-                    hintText: 'Enter secure password'),
-              ),
-            ),
-            TextButton(
-              onPressed: () {},
+            Center(
               child: Text(
-                'Forgot Password?',
-                style: TextStyle(color: Colors.blue, fontSize: 15),
+                'Hello',
+                style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
               ),
             ),
-            !api.loading
-                ? Container(
-                    height: 50,
-                    width: 250,
-                    decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: TextButton(
-                      onPressed: () {
-                        api.login(
-                            _userNameController.text, _passwordController.text);
+            Center(
+              child: Text('Sign in to continue',
+                  style: TextStyle(
+                    fontSize: 20,
+                  )),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(30, 40, 30, 20),
+              child: Material(
+                elevation: 10,
+                shadowColor: Colors.black54,
+                borderRadius: BorderRadius.all(Radius.circular(50)),
+                child: TextField(
+                  keyboardType: TextInputType.number,
+                  controller: _userNameController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(50))),
+                    labelText: 'Phone Number',
+                    prefixIcon: Icon(Icons.phone),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+                padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                child: Material(
+                  elevation: 10,
+                  shadowColor: Colors.black54,
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                  child: TextField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(50))),
+                      labelText: 'Password',
+                      prefixIcon: Icon(Icons.lock_outlined),
+                    ),
+                  ),
+                )),
+            Padding(
+                padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        getIt<NavigationService>().pushTo(WEB_VIEW,
+                            arguments: WebViewArguments(BASE_URL + "/reset"));
                       },
                       child: Text(
-                        'Login',
-                        style: TextStyle(color: Colors.white, fontSize: 25),
+                        'Forgot your password ?',
+                        style: TextStyle(color: Colors.grey, fontSize: 12),
                       ),
                     ),
-                  )
-                : SpinnerWidget(),
-            SizedBox(
-              height: 130,
-            ),
-            TextButton(
-              onPressed: () {
+                  ],
+                )),
+            Padding(
+                padding: EdgeInsets.fromLTRB(30, 30, 30, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Sign in',
+                      style: TextStyle(fontSize: 30),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    !api.loading
+                        ? ElevatedButton(
+                            onPressed: () {
+                              api.login(_userNameController.text,
+                                  _passwordController.text);
+                            },
+                            child: Icon(Icons.arrow_forward_outlined),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              )),
+                            ))
+                        : SpinnerWidget(),
+                  ],
+                )),
+            SizedBox(height: 50),
+            GestureDetector(
+              onTap: () {
                 getIt<NavigationService>().pushTo(SHOP_REGISTRATION);
               },
-              child: Text(
-                'New user? Register here.',
-                style: TextStyle(color: Colors.blue, fontSize: 15),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                child: Text('Do not have an Account?'),
               ),
-            ),
+            )
           ],
         ),
       ),

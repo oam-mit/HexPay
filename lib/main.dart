@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hexpay/backend/views/authview.dart';
 import 'package:hexpay/consts/routes.dart' as routes;
-import 'package:hexpay/frontend/screens/home.dart';
+import 'package:hexpay/frontend/screens/WebView.dart';
+import 'package:hexpay/frontend/screens/customer/home.dart';
 import 'package:hexpay/frontend/screens/login.dart';
 import 'package:hexpay/frontend/screens/payment/payment.dart';
 import 'package:hexpay/frontend/screens/payment/showQR.dart';
@@ -37,7 +38,8 @@ class MyApp extends StatelessWidget {
           routes.TRANSACTIONS: (_) => TransactionScreen(),
           routes.PAYMENT: (_) => PaymentScreen(),
           routes.QR_CODE: (_) => QRScreen(),
-          routes.SHOP_REGISTRATION: (_) => ShopRegisterScreen()
+          routes.SHOP_REGISTRATION: (_) => ShopRegisterScreen(),
+          routes.WEB_VIEW: (_) => WebViewExample()
         },
         navigatorKey: getIt<NavigationService>().navigatorKey,
       ),

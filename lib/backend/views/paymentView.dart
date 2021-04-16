@@ -9,7 +9,7 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 class PaymentView extends ChangeNotifier {
   Razorpay _razorpay;
 
-  bool _loading = true;
+  bool _loading = false;
   bool get loading => _loading;
 
   void setLoading(bool value) {

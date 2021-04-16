@@ -27,7 +27,7 @@ class CommonViews extends ChangeNotifier {
 
     setLoading(true);
     try {
-      print(authview.token);
+      print(authview.token); //TODO: Remove this
       Response resp =
           await get(url, headers: {'Authorization': authview.token});
 
