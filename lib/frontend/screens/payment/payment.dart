@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:hexpay/backend/models/Transaction.dart';
 
 import 'package:hexpay/backend/views/paymentView.dart';
@@ -18,6 +19,10 @@ class PaymentScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text('Make Payment'),
+          elevation: 0,
+          backgroundColor: HexColor('#0f1951'),
+          iconTheme: IconThemeData(color: Colors.white),
+          centerTitle: true,
         ),
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),

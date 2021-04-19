@@ -1,4 +1,4 @@
-import 'package:hexpay/backend/models/Arguments.dart';
+import 'package:hexpay/backend/models/arguments/Arguments.dart';
 
 class WebViewArguments implements Arguments {
   String url;

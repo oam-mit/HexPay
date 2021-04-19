@@ -38,7 +38,7 @@ class User {
         'email': email,
         'first_name': firstName,
         'last_name': lastName,
-        'upiId': upiId,
+        'upi_id': upiId,
         'is_shop': isShop,
         'is_customer': isCustomer,
         'shop_name': 'shop_name',

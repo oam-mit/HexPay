@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:hexpay/backend/views/authview.dart';
 import 'package:hexpay/backend/views/customerViews.dart';
 import 'package:hexpay/consts/routes.dart';
 import 'package:hexpay/frontend/widgets/ShopWidget.dart';
 import 'package:hexpay/frontend/widgets/SpinnerWidget.dart';
 import 'package:hexpay/locator.dart';
+import 'package:hexpay/services/dialogService.dart';
 import 'package:hexpay/services/navigator.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   Widget _renderDrawer(context, AuthView authView) {
     return Drawer(
-      // Add a ListView to the drawer. This ensures the user can scroll
-      // through the options in the drawer if there isn't enough vertical
-      // space to fit everything.
       child: ListView(
-        // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
@@ -23,18 +21,19 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Text(
                   authView.user.firstName + " " + authView.user.lastName,
-                  style: TextStyle(fontSize: 30),
+                  style: TextStyle(fontSize: 30, color: Colors.white),
                 ),
-                TextButton(
+                ElevatedButton.icon(
                   onPressed: () {
                     authView.logout();
                   },
-                  child: Text("Logout"),
-                ),
+                  icon: Icon(Icons.logout),
+                  label: Text('Submit'),
+                )
               ],
             ),
             decoration: BoxDecoration(
-              color: Colors.blue[200],
+              color: HexColor('#0f1951'),
             ),
           ),
           ListTile(
@@ -44,11 +43,10 @@ class HomeScreen extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Item 2'),
+            title: Text('Analytics'),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
+              getIt<DialogService>()
+                  .showAlertDialog('Error', 'Analytics yet to be implement');
               Navigator.pop(context);
             },
           ),
@@ -84,14 +82,26 @@ class HomeScreen extends StatelessWidget {
     var authView = Provider.of<AuthView>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home', textAlign: TextAlign.center),
+        title: Text(
+          'Home',
+          style: TextStyle(color: Colors.white),
+        ),
+        elevation: 0,
+        backgroundColor: HexColor('#0f1951'),
+        iconTheme: IconThemeData(color: Colors.white),
+        centerTitle: true,
       ),
       drawer: _renderDrawer(context, authView),
       body: ChangeNotifierProvider(
           create: (_) => CustomerView.initialize(),
           child: Consumer<CustomerView>(
             builder: (context, custView, child) {
-              return renderBody(custView);
+              return Stack(
+                children: [
+                  Image.asset('assets/images/background.png'),
+                  renderBody(custView),
+                ],
+              );
             },
           )),
     );

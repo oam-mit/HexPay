@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:hexpay/backend/views/commonViews.dart';
 import 'package:hexpay/frontend/widgets/SpinnerWidget.dart';
 import 'package:hexpay/frontend/widgets/TransactionWidget.dart';
@@ -38,13 +39,23 @@ class _TransactionScreenState extends State<TransactionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Transactions'),
+        title: Text(
+          'Transactions',
+          style: TextStyle(color: Colors.white),
+        ),
+        elevation: 0,
+        backgroundColor: HexColor('#0f1951'),
+        iconTheme: IconThemeData(color: Colors.white),
+        centerTitle: true,
       ),
       body: ChangeNotifierProvider<CommonViews>.value(
         value: custView,
         child: Consumer<CommonViews>(
           builder: (context, custView, child) {
-            return Center(child: this.renderBody(custView));
+            return Stack(children: [
+              Image.asset('assets/images/background.png'),
+              Center(child: this.renderBody(custView))
+            ]);
           },
         ),
       ),

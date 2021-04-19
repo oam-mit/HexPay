@@ -10,7 +10,7 @@
             "name": "hexpay",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "debug"
+            "flutterMode": "release"
             
         }
     ]

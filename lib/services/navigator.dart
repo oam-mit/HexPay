@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hexpay/backend/models/Arguments.dart';
+import 'package:hexpay/backend/models/arguments/Arguments.dart';
 
 class NavigationService {
   final GlobalKey<NavigatorState> navigatorKey =

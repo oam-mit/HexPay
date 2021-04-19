@@ -27,11 +27,11 @@ class CommonViews extends ChangeNotifier {
 
     setLoading(true);
     try {
-      print(authview.token); //TODO: Remove this
       Response resp =
           await get(url, headers: {'Authorization': authview.token});
 
       Map mappedResponse = jsonDecode(resp.body);
+
       for (var transaction in mappedResponse['transactions']) {
         _transactions.add(Transaction.fromJson(transaction));
       }
