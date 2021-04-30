@@ -9,6 +9,7 @@ import 'package:hexpay/locator.dart';
 import 'package:hexpay/services/dialogService.dart';
 import 'package:hexpay/services/navigator.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class HomeScreen extends StatelessWidget {
   Widget _renderDrawer(context, AuthView authView) {
@@ -25,10 +26,13 @@ class HomeScreen extends StatelessWidget {
                 ),
                 ElevatedButton.icon(
                   onPressed: () {
-                    authView.logout();
+                    getIt<DialogService>().showYesNoDialog(
+                        'Confirmation', 'Are you sure you want to logout?', () {
+                      authView.logout();
+                    }, type: AlertType.warning);
                   },
                   icon: Icon(Icons.logout),
-                  label: Text('Submit'),
+                  label: Text('Logout'),
                 )
               ],
             ),
@@ -43,11 +47,9 @@ class HomeScreen extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Analytics'),
+            title: Text('Credits Placed'),
             onTap: () {
-              getIt<DialogService>()
-                  .showAlertDialog('Error', 'Analytics yet to be implement');
-              Navigator.pop(context);
+              getIt<NavigationService>().pushTo(CREDITS_PLACED);
             },
           ),
         ],

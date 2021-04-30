@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hexpay/backend/models/Shop.dart';
+import 'package:hexpay/backend/views/authview.dart';
 import 'package:hexpay/consts/urls.dart';
 import 'package:hexpay/locator.dart';
 import 'package:hexpay/services/dialogService.dart';
@@ -41,5 +42,22 @@ class CustomerView with ChangeNotifier {
 
   CustomerView.initialize() {
     fetchShops();
+  }
+
+  void getCredits() async {
+    Uri url =
+        Uri.parse(BASE_URL + "/api/transactions/credit/get_credit_customer");
+    _setLoading(true);
+
+    try {
+      Response resp =
+          await get(url, headers: {'Authorization': getIt<AuthView>().token});
+      Map mappedResponse = jsonDecode(resp.body);
+      print(mappedResponse);
+      //_setLoading(false);
+    } catch (e) {
+      getIt<DialogService>()
+          .showAlertDialog('Error', 'Please check your network');
+    }
   }
 }

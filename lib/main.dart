@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hexpay/backend/views/authview.dart';
 import 'package:hexpay/consts/routes.dart' as routes;
 import 'package:hexpay/frontend/screens/WebView.dart';
+import 'package:hexpay/frontend/screens/customer/creditScreen.dart';
 import 'package:hexpay/frontend/screens/customer/home.dart';
 import 'package:hexpay/frontend/screens/login.dart';
 import 'package:hexpay/frontend/screens/payment/payment.dart';
 import 'package:hexpay/frontend/screens/payment/showQR.dart';
+import 'package:hexpay/frontend/screens/shop/home.dart';
 import 'package:hexpay/frontend/screens/shopRegistration.dart';
 import 'package:hexpay/frontend/screens/transactions.dart';
 import 'package:hexpay/frontend/widgets/SpinnerWidget.dart';
@@ -34,11 +36,19 @@ class MyApp extends StatelessWidget {
         routes: {
           routes.PRELOADER: (_) => Preloader(),
           routes.LOGIN: (_) => LoginScreen(),
+          routes.SHOP_REGISTRATION: (_) => ShopRegisterScreen(),
+
+          //Customer
           routes.HOME: (_) => HomeScreen(),
           routes.TRANSACTIONS: (_) => TransactionScreen(),
+          routes.CREDITS_PLACED: (_) => CustomerCreditScreen(),
+
+          //Shop
+          routes.SHOP_HOME: (_) => ShopHomeScreen(),
+
+          //Common
           routes.PAYMENT: (_) => PaymentScreen(),
           routes.QR_CODE: (_) => QRScreen(),
-          routes.SHOP_REGISTRATION: (_) => ShopRegisterScreen(),
           routes.WEB_VIEW: (_) => WebViewExample()
         },
         navigatorKey: getIt<NavigationService>().navigatorKey,

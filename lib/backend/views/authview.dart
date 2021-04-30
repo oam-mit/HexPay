@@ -10,6 +10,7 @@ import 'package:hexpay/locator.dart';
 import 'package:hexpay/services/dialogService.dart';
 import 'package:hexpay/services/navigator.dart';
 import 'package:http/http.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class AuthView extends ChangeNotifier {
   bool _loading = false;
@@ -34,6 +35,14 @@ class AuthView extends ChangeNotifier {
     notifyListeners();
   }
 
+  void _redirectAppropriately() {
+    if (user.isCustomer == true) {
+      getIt<NavigationService>().replaceTo(HOME);
+    } else {
+      getIt<NavigationService>().replaceTo(SHOP_HOME);
+    }
+  }
+
   void checkLoggedIn() async {
     setLoading(true);
     String user = await storage.getUser();
@@ -44,7 +53,7 @@ class AuthView extends ChangeNotifier {
     } else {
       this._user = User.fromJson(jsonDecode(user));
       setAuthenticated(true);
-      getIt<NavigationService>().replaceTo(HOME);
+      _redirectAppropriately();
     }
     setLoading(false);
   }
@@ -66,16 +75,10 @@ class AuthView extends ChangeNotifier {
 
     Map mappedResponse = jsonDecode(resp.body);
     if (mappedResponse['status'] == 'successful') {
-      if (mappedResponse['is_customer'] == true) {
-        _user = User.fromJson(mappedResponse);
-
-        await storage.storeUser(_user);
-        setAuthenticated(true);
-        getIt<NavigationService>().replaceTo(HOME);
-      } else {
-        getIt<DialogService>().showAlertDialog(
-            'Success', 'Logged in as shop but shop pages under development');
-      }
+      _user = User.fromJson(mappedResponse);
+      await storage.storeUser(_user);
+      setAuthenticated(true);
+      _redirectAppropriately();
     } else {
       getIt<DialogService>()
           .showAlertDialog('Error', 'Please check username and password');
@@ -121,8 +124,9 @@ class AuthView extends ChangeNotifier {
     Map status = await getIt<StorageView>().deleteUser();
     if (status['status'] == 'successful') {
       getIt<NavigationService>().replaceTo(LOGIN);
-      getIt<DialogService>()
-          .showAlertDialog('Success', 'Logged out successfully');
+      getIt<DialogService>().showAlertDialog(
+          'Success', 'Logged out successfully',
+          type: AlertType.success);
     } else {
       getIt<DialogService>().showAlertDialog('Error', 'Please try again');
     }

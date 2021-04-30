@@ -7,6 +7,7 @@ import 'package:hexpay/consts/urls.dart';
 import 'package:hexpay/locator.dart';
 import 'package:hexpay/services/dialogService.dart';
 import 'package:http/http.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 
 class CommonViews extends ChangeNotifier {
   bool _loading = false;
@@ -31,6 +32,7 @@ class CommonViews extends ChangeNotifier {
           await get(url, headers: {'Authorization': authview.token});
 
       Map mappedResponse = jsonDecode(resp.body);
+      _transactions = [];
 
       for (var transaction in mappedResponse['transactions']) {
         _transactions.add(Transaction.fromJson(transaction));
@@ -41,5 +43,16 @@ class CommonViews extends ChangeNotifier {
           .showAlertDialog('Error', 'Please check your network connection');
     }
     setLoading(false);
+  }
+
+  void scanQRCode() async {
+    ScanResult codeSanner = await BarcodeScanner.scan(
+      options: ScanOptions(
+        useCamera: -1,
+      ),
+    );
+
+    getIt<DialogService>().showAlertDialog('Alert',
+        'Transaction Id is: ${codeSanner.rawContent}. Validation left');
   }
 }

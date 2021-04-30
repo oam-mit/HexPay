@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:hexpay/backend/models/Transaction.dart';
+import 'package:hexpay/backend/views/authview.dart';
 
 import 'package:hexpay/backend/views/paymentView.dart';
 import 'package:hexpay/frontend/widgets/SpinnerWidget.dart';
 
 import 'package:hexpay/locator.dart';
+import 'package:hexpay/services/dialogService.dart';
 
 import 'package:provider/provider.dart';
 
 class PaymentScreen extends StatelessWidget {
+  AuthView authView;
   Widget renderBody(TransactionArguments arguments, PaymentView paymentView) {
     if (paymentView.loading)
       return Center(
@@ -70,8 +73,27 @@ class PaymentScreen extends StatelessWidget {
                             }
                           },
                           icon: Icon(Icons.send_sharp),
-                          label: Text('Submit'),
-                        )
+                          label: Text('Pay Now'),
+                        ),
+                        authView.user.isCustomer
+                            ? ElevatedButton.icon(
+                                onPressed: () {
+                                  if (_formKey.currentState.validate()) {
+                                    getIt<DialogService>().showYesNoDialog(
+                                        'Confimation',
+                                        'Are you sure you want to proceed?',
+                                        () {
+                                      arguments.amount =
+                                          int.parse(_amountController.text);
+
+                                      paymentView.placeCredit(arguments);
+                                    });
+                                  }
+                                },
+                                icon: Icon(Icons.send_sharp),
+                                label: Text('Request Credit'),
+                              )
+                            : Container(),
                       ],
                     )),
               ],
@@ -85,6 +107,7 @@ class PaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TransactionArguments arguments = ModalRoute.of(context).settings.arguments;
+    authView = Provider.of<AuthView>(context);
     return ChangeNotifierProvider<PaymentView>.value(
         value: getIt<PaymentView>(),
         child: Consumer<PaymentView>(

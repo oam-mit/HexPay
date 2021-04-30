@@ -7,9 +7,11 @@ import 'package:hexpay/backend/views/authview.dart';
 import 'package:hexpay/consts/routes.dart';
 import 'package:hexpay/consts/urls.dart';
 import 'package:hexpay/locator.dart';
+import 'package:hexpay/services/dialogService.dart';
 import 'package:hexpay/services/navigator.dart';
 import 'package:http/http.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class PaymentView extends ChangeNotifier {
   Razorpay _razorpay;
@@ -73,5 +75,39 @@ class PaymentView extends ChangeNotifier {
     setLoading(true);
 
     _razorpay.open(options);
+  }
+
+  void placeCredit(TransactionArguments arguments) async {
+    if (arguments.amount == null) {
+      getIt<DialogService>().showAlertDialog(
+          'Error', 'Please enter amount properly',
+          type: AlertType.error);
+    } else {
+      Uri url = Uri.parse(BASE_URL + "/api/transactions/credit/place");
+      setLoading(true);
+      Response resp = await post(url,
+          body: jsonEncode({
+            'upi_id': arguments.toUpiId,
+            'amount': arguments.amount.toString(),
+          }),
+          headers: {
+            'Authorization': getIt<AuthView>().token,
+            "content-type": "application/json"
+          });
+
+      Map mappedResponse = jsonDecode(resp.body);
+      if (mappedResponse['status'] == 'successful') {
+        setLoading(false);
+        getIt<NavigationService>()
+            .replaceTo(getIt<AuthView>().user.isCustomer ? HOME : SHOP_HOME);
+        getIt<DialogService>().showAlertDialog(
+            'Success', 'Credit Placed Successfully',
+            type: AlertType.success);
+      } else {
+        setLoading(false);
+        getIt<DialogService>().showAlertDialog('Error', 'Something went wrong',
+            type: AlertType.error);
+      }
+    }
   }
 }

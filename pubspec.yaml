@@ -35,6 +35,8 @@ dependencies:
   qr_flutter: ^4.0.0
   webview_flutter: ^2.0.4
   hexcolor: ^2.0.3
+  barcode_scan: any
+  rflutter_alert: ^2.0.2
   
   
 
